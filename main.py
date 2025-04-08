@@ -4,10 +4,8 @@ import os
 from google.cloud import bigquery
 from google.auth.exceptions import DefaultCredentialsError
 
-# 🔐 Chemin vers la clé JSON du compte de service
-SERVICE_ACCOUNT_JSON = "thelio-apm-20250411-a83142d3955e.json"  # ➜ à adapter si besoin
+SERVICE_ACCOUNT_JSON = "thelio-apm-20250411-a83142d3955e.json" 
 
-# 📌 Variables projet
 API_URL = "https://countriesnow.space/api/v0.1/countries/info?returns=population,capital,area"
 PROJECT_ID = "thelio-apm-20250411"
 DATASET_ID = "DTM_THELIO"
@@ -67,10 +65,6 @@ def fetch_country_data():
     return []
 
 def insert_data_into_bigquery_autodetect(data):
-    """
-    Insère les données dans BigQuery avec détection automatique du schéma,
-    en utilisant l'authentification via un compte de service.
-    """
     try:
         client = bigquery.Client.from_service_account_json(SERVICE_ACCOUNT_JSON, project=PROJECT_ID)
 
