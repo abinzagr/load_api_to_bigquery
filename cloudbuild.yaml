@@ -1,15 +1,15 @@
 steps:
-  # Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'eu.gcr.io/thelio-apm-20250411/hackathon:${_IMAGE_TAG}', '.']
-  # Push Docker image to Artifact Registry
+    args: ['build', '-t', 'europe-docker.pkg.dev/thelio-apm-20250411/hackathon/hackathon:${_IMAGE_TAG}', '.']
+  
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'eu.gcr.io/thelio-apm-20250411/hackathon:${_IMAGE_TAG}']
-  # Deploy new Cloud Run revision
+    args: ['push', 'europe-docker.pkg.dev/thelio-apm-20250411/hackathon/hackathon:${_IMAGE_TAG}']
+
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['beta', 'run','jobs', 'deploy', 'hackathon',
-      '--image', 'eu.gcr.io/thelio-apm-20250411/hackathon:${_IMAGE_TAG}',
-      '--region', 'europe-west1'] 
+    args: ['beta', 'run', 'jobs', 'deploy', 'hackathon',
+      '--image', 'europe-docker.pkg.dev/thelio-apm-20250411/hackathon/hackathon:${_IMAGE_TAG}',
+      '--region', 'europe-west1']
+
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET   
