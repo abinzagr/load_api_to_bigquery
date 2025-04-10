@@ -66,9 +66,9 @@ def fetch_country_data():
 
 def insert_data_into_bigquery_autodetect(data):
     try:
-        client = bigquery.Client.from_service_account_json(SERVICE_ACCOUNT_JSON, project=PROJECT_ID)
+        client = bigquery.Client()
 
-        table_ref = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+        table_ref = client.dataset(DATASET_ID).table(TABLE_ID)
 
         job_config = bigquery.LoadJobConfig(
             autodetect=True,
@@ -77,15 +77,15 @@ def insert_data_into_bigquery_autodetect(data):
         )
 
         job = client.load_table_from_json(data, table_ref, job_config=job_config)
-        job.result()
+        job.result()  # Bloque jusqu'à ce que le job soit fini
 
-        print(f"{len(data)} lignes insérées dans {table_ref}.")
+        print(f"{len(data)} lignes insérées dans {PROJECT_ID}.{DATASET_ID}.{TABLE_ID}")
 
     except DefaultCredentialsError:
         print("Erreur : Les identifiants Google Cloud ne sont pas configurés.")
     except Exception as e:
         print(f"Erreur lors de l'insertion dans BigQuery : {e}")
-
+        
 def main():
     data = fetch_country_data()
     if data:

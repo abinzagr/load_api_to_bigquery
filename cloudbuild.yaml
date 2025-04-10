@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-docker.pkg.dev/thelio-apm-20250411/atelier-gcp/atelier-gcp:${_IMAGE_TAG}', '.']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'europe-docker.pkg.dev/thelio-apm-20250411/atelier-gcp/atelier-gcp:${_IMAGE_TAG}']
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['beta', 'run', 'jobs', 'deploy', 'atelier-gcp',
+      '--image', 'europe-docker.pkg.dev/thelio-apm-20250411/atelier-gcp/atelier-gcp:${_IMAGE_TAG}',
+      '--region', 'europe-west1']
+
+
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET   
+  
